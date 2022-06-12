@@ -1,0 +1,21 @@
+.headerStyle {
+    background-color: #222;
+    position: absolute;
+    height: 36px;
+    width: 100%;
+    padding-top: 8px;
+    padding-bottom: 8px;
+    padding-right: 32px;
+    padding-left: 16px;
+}
+
+.logoStyle {
+    background-color: #ff7f7f;
+    height: 35px;
+    animation-duration: 8s;
+    animation-timing-function: linear;
+}
+
+.buttonStyle {
+    float: right;
+}
