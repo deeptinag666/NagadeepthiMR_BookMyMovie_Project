@@ -1,47 +1,51 @@
-import { Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import Header from "../../common/header/Header";
 import "./Home.css";
+import { Grid } from "@mui/material";
 import GridList from "@material-ui/core/GridList";
+import GridListTile from "@material-ui/core/GridListTile";
+import GridListTileBar from "@material-ui/core/GridListTileBar";
 
 const Home = (props) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState([]);
 
   const getMovies = async () => {
-      try{
-        const response = await fetch('http://localhost:8085/api/v1/movies?page=1&limit=10', {
-            method: 'GET',
-            headers: {'Content-Type': 'application/json'},
-        });
-        console.log(response);
-        return await response.json();
-      }catch(error){
-          console.error(error);
-          return [];
-      }  
+    try {
+      const response = await fetch(
+        "http://localhost:8085/api/v1/movies?page=1&limit=10"
+      );
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   };
 
-  useEffect(() => {
-    const movieList = getMovies();
-    // const movieList = [
-    //   {
-    //     poster_url: "",
-    //     title: "",
-    //   },
-    //   {
-    //     poster_url: "",
-    //     title: "",
-    //   },
-    // ];
+  useEffect(async () => {
+    console.log("inside useeffect hook");
+    const moviesResponse = await getMovies();
+    const movieList = [];
+    moviesResponse.movies.map((movie) => {
+      movieList.push(movie);
+    });
     setUpcomingMoviesList(movieList);
   }, []);
 
   return (
-    <Stack direction="row">
+    <Grid container direction="row">
       <Header baseUrl={props.baseUrl} />
       <div className="homePageHeader">Upcoming Movies</div>
-      <GridList></GridList>
-    </Stack>
+      <div className="containerDiv">
+        <GridList cellHeight={250} cols={6} className="gridListStyle">
+          {upcomingMoviesList.map((movie) => (
+            <GridListTile key={movie.poster_url}>
+              <img src={movie.poster_url} alt={movie.title} />
+              <GridListTileBar title={movie.title} />
+            </GridListTile>
+          ))}
+        </GridList>
+      </div>
+    </Grid>
   );
 };
 

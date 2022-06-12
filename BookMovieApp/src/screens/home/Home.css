@@ -1,9 +1,27 @@
 .homePageHeader {
-    position: relative;
-    background-color: #ff9999;
-    padding: 8px;
-    margin-top: 52px;
-    width: 100%;
-    text-align: center;
-    font-size: 1rem;
+  position: relative;
+  background-color: #ff9999;
+  padding: 8px;
+  margin-top: 52px;
+  width: 100%;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.containerDiv {
+  position: relative;
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-around;
+  overflow: hidden;
+  width: 100%;
+  height: 270px;
+}
+
+.gridListStyle {
+  width: 100%;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  overflow-x: scroll;
+  transform: translateZ(0);
 }
