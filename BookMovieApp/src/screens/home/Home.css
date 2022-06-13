@@ -15,7 +15,7 @@
   justify-content: space-around;
   overflow: hidden;
   width: 100%;
-  height: 270px;
+  height: 269px;
 }
 
 .gridListStyle {
@@ -24,4 +24,21 @@
   flex-direction: column;
   overflow-x: scroll;
   transform: translateZ(0);
+}
+
+.containerReleaseDiv {
+  position: relative;
+  display: flex;
+  margin-right: 16px;
+  margin-top: 10px;
+  justify-content: space-around;
+}
+
+.cardSearchStyle {
+  position: relative;
+  width: 24%;
+}
+
+.releaseMovieGridTile:hover {
+  cursor: grab;
 }

@@ -10,8 +10,6 @@ import {
   Button,
   Tab,
   Tabs,
-  Collapse,
-  FormLabel,
 } from "@mui/material";
 
 function TabPanel(props) {
