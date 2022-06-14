@@ -53,6 +53,17 @@ const LoginModal = (props) => {
     useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
+  const modalStyles = {
+    content: {
+      top: '50%',
+      left: '50%',
+      right: 'auto',
+      bottom: 'auto',
+      marginRight: '-50%',
+      transform: 'translate(-50%, -50%)',
+    },
+  };  
+
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -116,7 +127,7 @@ const LoginModal = (props) => {
   return (
     <Modal
       isOpen={props.showModal}
-      className="loginModalStyle"
+      style={modalStyles}
       onRequestClose={props.closeModal}
     >
       <Box sx={{ width: "100%" }}>

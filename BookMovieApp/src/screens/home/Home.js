@@ -30,6 +30,8 @@ import { Button } from "@mui/material";
 const Home = (props) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState([]);
   const [releasedMoviesList, setReleasedMoviesList] = useState([]);
+  const [filteredMovieList, setFilteredMovieList] = useState([]);
+  const [selectedMovie, setSelectedMovie] = useState("");
   const [genres, setGenres] = useState([]);
   const [selectedGenres, setSelectedGenres] = useState([]);
   const [artists, setArtists] = useState([]);
@@ -92,6 +94,12 @@ const Home = (props) => {
     }
   };
 
+  const selectMovieHandler = (event) => {
+    if (event.target.value !== "") {
+      setSelectedMovie(event.target.value);
+    }
+  };
+
   const selectedGenresHandler = (event) => {
     const {
       target: { value },
@@ -112,7 +120,77 @@ const Home = (props) => {
     );
   };
 
-  const applySearchHandler = () => {}
+  const applySearchHandler = () => {
+    console.log("apply pressed");
+    console.log(releaseStartDate);
+    if (
+      selectedMovie === "" &&
+      selectedGenres.length === 0 &&
+      selectedArtists.length === 0 &&
+      releaseStartDate === null &&
+      releaseEndDate === null
+    ) {
+      console.log('inside if');
+      setFilteredMovieList(releasedMoviesList);
+    } else {
+      const filteredReleasedMovies = filteredMovieList.filter((movie) => {
+        // Check if movie name matches filter criteria
+        let movieNameMatching = false;
+        if (movie.title === selectedMovie) {
+          movieNameMatching = true;
+        }
+
+        // Check if genres include the ones present in filter
+        let areGenresPresent = false;
+        selectedGenres.forEach((genre) => {
+          if (!areGenresPresent) {
+            areGenresPresent = movie.genres.includes(genre);
+          }
+        });
+
+        // Check if artists include the ones present in filter
+        let areArtistsPresent = false;
+        movie.artists.forEach((artist) => {
+          const artistName = artist.first_name.concat(" ", artist.last_name);
+          if (selectedArtists.includes(artistName)) {
+            areArtistsPresent = true;
+          }
+        });
+
+        // Check if release date is between the start date and end date
+        let isWithinReleaseDateRange = true;
+
+        // Check if the date range matches
+        if(releaseStartDate){
+          const relStartDate = new Date(releaseStartDate);
+          const relStartDateFinal = relStartDate.getFullYear() + '-' + (relStartDate.getMonth() + 1) + '-' + relStartDate.getDate();
+
+          if(Date.parse(movie.release_date) < Date.parse(relStartDateFinal)){
+            isWithinReleaseDateRange = false;
+          }
+        }
+
+        if(releaseEndDate){
+          const relEndDate = new Date(releaseEndDate);
+          const relEndDateFinal = relEndDate.getFullYear() + '-' + (relEndDate.getMonth() + 1) + '-' + relEndDate.getDate();
+
+          if(Date.parse(movie.release_date) > Date.parse(relEndDateFinal)){
+            isWithinReleaseDateRange = false;
+          }
+        }
+
+        if (
+          movieNameMatching ||
+          areGenresPresent ||
+          areArtistsPresent ||
+          isWithinReleaseDateRange
+        ) {
+          return movie;
+        }
+      });
+      setFilteredMovieList(filteredReleasedMovies);
+    }
+  };
 
   useEffect(async () => {
     console.log("inside useeffect hook");
@@ -136,8 +214,10 @@ const Home = (props) => {
     artistsResponse.artists.map((artistData) => {
       artistsList.push(artistData);
     });
+
     setUpcomingMoviesList(movieList);
     setReleasedMoviesList(releasedMoviesList);
+    setFilteredMovieList(releasedMoviesList);
     setGenres(genresList);
     setArtists(artistsList);
   }, []);
@@ -162,7 +242,7 @@ const Home = (props) => {
         <Grid item style={{ width: "76%" }}>
           <div className="containerReleaseDiv">
             <GridList cellHeight={350} cols={4}>
-              {releasedMoviesList.map((movie) => (
+              {filteredMovieList.map((movie) => (
                 <GridListTile
                   className="releaseMovieGridTile"
                   key={movie.poster_url}
@@ -190,6 +270,8 @@ const Home = (props) => {
                     variant="standard"
                     label="Movie Name"
                     style={{ minWidth: "240px", maxWidth: "240px" }}
+                    value={selectedMovie}
+                    onChange={selectMovieHandler}
                   ></TextField>
 
                   <FormControl
@@ -304,7 +386,7 @@ const Home = (props) => {
                     aria-label="Apply"
                     color="primary"
                     size="large"
-                    sx={{mt: 5}}
+                    sx={{ mt: 5 }}
                     onClick={applySearchHandler}
                   >
                     APPLY
