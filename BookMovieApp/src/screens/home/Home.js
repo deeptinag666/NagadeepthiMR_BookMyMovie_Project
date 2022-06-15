@@ -24,9 +24,7 @@ import createPalette from "@material-ui/core/styles/createPalette";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
-import DateFnsUtils from "@date-io/date-fns";
 import { Button } from "@mui/material";
-import { Link } from "react-router-dom";
 import {useHistory} from "react-router-dom";
 
 const Home = (props) => {
@@ -231,11 +229,6 @@ const Home = (props) => {
     }
   };
 
-  const movieClickHandler = () => {
-    console.log("movie click handler");
-    //navigate("/movie/");
-  };
-
   useEffect(async () => {
     console.log("inside useeffect hook");
     const moviesResponse = await getMovies();
@@ -287,14 +280,13 @@ const Home = (props) => {
           <div className="containerReleaseDiv">
             <GridList cellHeight={350} cols={4}>
               {filteredMovieList.map((movie) => (
-                // <Link to={"/movies/" + movie.id}>
                   <GridListTile
                     className="releaseMovieGridTile"
                     key={movie.poster_url}
                     onClick={() => {
                       setSelectedReleasedMovie(movie);
                       console.log(selectedReleasedMovie);
-                      history.push("/movies/:"+movie.id);
+                      history.push("/movie/"+movie.id);
                     }}
                   >
                     <img src={movie.poster_url} alt={movie.title} />
