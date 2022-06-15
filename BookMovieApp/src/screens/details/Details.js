@@ -73,7 +73,7 @@ const Details = (props) => {
           <Typography variant="h2">{movieDetails.title}</Typography>
           <Stack direction="row" spacing={1}>
             <Typography sx={{ fontWeight: 600 }}>Genre:</Typography>
-            <Typography variant="body1">{movieDetails.genres}</Typography>
+            <Typography variant="body1">{movieDetails.genres && movieDetails.genres.join(", ")}</Typography>
           </Stack>
           <Stack direction="row" spacing={1}>
             <Typography sx={{ fontWeight: 600 }}>Duration:</Typography>

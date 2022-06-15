@@ -4,6 +4,7 @@ import logo from "../../assets/logo.svg";
 import Button from "@mui/material/Button";
 import { Stack } from "@mui/material";
 import LoginModal from "../loginModal/LoginModal";
+import {useHistory} from "react-router-dom";
 
 const Header = (props) => {
   console.log("Inside header component");
@@ -11,6 +12,7 @@ const Header = (props) => {
   const [isLogin, setLogin] = useState(false);
   const [showBookMovie, setShowBookMovie] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const history = useHistory;
 
   const loginHandler = () => {
     setLogin(true);
