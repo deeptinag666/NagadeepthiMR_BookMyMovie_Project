@@ -30,6 +30,7 @@ const Details = (props) => {
   };
 
   const getMovieDetails = async () => {
+    console.log(props);
     const movieUrl =
       "http://localhost:8085/api/v1/movies/" + props.match.params.id;
     const response = await fetch(movieUrl);
@@ -57,7 +58,7 @@ const Details = (props) => {
   return (
     <div className="detailPageStyle">
       <div>
-        <Header baseUrl={props.baseUrl} />
+        <Header baseUrl={props.baseUrl} showBookMovie="true"/>
       </div>
       <br />
       <div className="backToHome">

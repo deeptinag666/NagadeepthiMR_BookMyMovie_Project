@@ -4,13 +4,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import Modal from "react-modal";
 import "./LoginModal.css";
-import {
-  FormControl,
-  TextField,
-  Button,
-  Tab,
-  Tabs,
-} from "@mui/material";
+import { FormControl, TextField, Button, Tab, Tabs } from "@mui/material";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -40,6 +34,11 @@ TabPanel.propTypes = {
 
 const LoginModal = (props) => {
   const [value, setValue] = useState(0);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
   const [firstNameError, setFirstNameError] = useState(false);
   const [firstNameErrorMessage, setFirstNameErrorMessage] = useState("");
   const [lastNameError, setLastNameError] = useState(false);
@@ -49,20 +48,41 @@ const LoginModal = (props) => {
   const [passwordError, setPasswordError] = useState(false);
   const [passwordErrorMessage, setPasswordErrorMessage] = useState("");
   const [contactNumberError, setContactNumberError] = useState(false);
-  const [conatctNumberErrorMessage, setContactNumberErrorMessage] =
+  const [contactNumberErrorMessage, setContactNumberErrorMessage] =
     useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
 
   const modalStyles = {
     content: {
-      top: '50%',
-      left: '50%',
-      right: 'auto',
-      bottom: 'auto',
-      marginRight: '-50%',
-      transform: 'translate(-50%, -50%)',
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
     },
-  };  
+  };
+
+  const firstNameChangeHandler = (event) => {
+    setFirstName(event.target.value);
+  };
+
+  const lastNameChangeHandler = (event) => {
+    setLastName(event.target.value);
+  };
+
+  const emailAddressChangeHandler = (event) => {
+    setEmailAddress(event.target.value);
+  };
+
+  const passwordChangeHandler = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const contactNumberChangeHandler = (event) => {
+    setContactNumber(event.target.value);
+  };
 
   const handleTabChange = (event, newValue) => {
     setValue(newValue);
@@ -120,8 +140,40 @@ const LoginModal = (props) => {
 
   const registerUserHandler = () => {
     // If registration is successful, then set registrationSuccess to true
-    console.log('inside registerUserHandler');
-    setRegistrationSuccess(true);
+    const requestObj = {
+      email_address: emailAddress,
+      first_name: firstName,
+      last_name: lastName,
+      mobile_number: contactNumber,
+      password: password,
+    };
+
+    const serviceRequest = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(requestObj),
+    };
+    fetch("http://localhost:8085/api/v1/signup", serviceRequest)
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => setRegistrationSuccess(true));
+  };
+
+  const loginHandler = () => {
+    const requestObj = {}
+
+    // TODO Add authorization header
+    const serviceRequest = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch("http://localhost:8085/api/v1/auth/login", serviceRequest)
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => setIsLoginSuccess(true));
   };
 
   return (
@@ -162,6 +214,7 @@ const LoginModal = (props) => {
               variant="contained"
               size="small"
               color="primary"
+              onClick={loginHandler}
             >
               Login
             </Button>
@@ -175,9 +228,11 @@ const LoginModal = (props) => {
               label="First Name"
               variant="standard"
               required
+              value={firstName}
               error={firstNameError}
               helperText={firstNameErrorMessage}
               onBlur={checkFirstNameHandler}
+              onChange={firstNameChangeHandler}
             />
             <TextField
               sx={{ m: 1 }}
@@ -185,9 +240,11 @@ const LoginModal = (props) => {
               label="Last Name"
               variant="standard"
               required
+              value={lastName}
               error={lastNameError}
               helperText={lastNameErrorMessage}
               onBlur={checkLastNameHandler}
+              onChange={lastNameChangeHandler}
             />
             <TextField
               sx={{ m: 1 }}
@@ -195,9 +252,11 @@ const LoginModal = (props) => {
               label="Email"
               variant="standard"
               required
+              value={emailAddress}
               error={emailError}
               helperText={emailErrorMessage}
               onBlur={checkEmailHandler}
+              onChange={emailAddressChangeHandler}
             />
             <TextField
               sx={{ m: 1 }}
@@ -205,9 +264,11 @@ const LoginModal = (props) => {
               label="Password"
               variant="standard"
               required
+              value={password}
               error={passwordError}
               helperText={passwordErrorMessage}
               onBlur={checkPasswordHandler}
+              onChange={passwordChangeHandler}
             />
             <TextField
               sx={{ m: 1 }}
@@ -215,11 +276,17 @@ const LoginModal = (props) => {
               label="Contact No."
               variant="standard"
               required
+              value={contactNumber}
               error={contactNumberError}
-              helperText={conatctNumberErrorMessage}
+              helperText={contactNumberErrorMessage}
               onBlur={checkContactNumberHandler}
+              onChange={contactNumberChangeHandler}
             />
-            {registrationSuccess && <p className="messageStyle">Registration Successful. Please Login!</p>}
+            {registrationSuccess && (
+              <p className="messageStyle">
+                Registration Successful. Please Login!
+              </p>
+            )}
             <Button
               sx={{ m: 5 }}
               variant="contained"

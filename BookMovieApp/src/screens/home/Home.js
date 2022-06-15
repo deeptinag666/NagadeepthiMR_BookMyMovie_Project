@@ -53,7 +53,7 @@ const Home = (props) => {
   const getMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8085/api/v1/movies?page=1&limit=10"
+        "http://localhost:8085/api/v1/movies"
       );
       return await response.json();
     } catch (error) {
@@ -61,6 +61,18 @@ const Home = (props) => {
       return [];
     }
   };
+
+  const getPublishedMovies = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:8085/api/v1/movies?status=PUBLISHED"
+      );
+      return await response.json();
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  }
 
   const getReleasedMovies = async () => {
     try {
@@ -232,6 +244,7 @@ const Home = (props) => {
   useEffect(async () => {
     console.log("inside useeffect hook");
     const moviesResponse = await getMovies();
+    const publishedMoviesResponse = await getPublishedMovies();
     const releasedMoviesResponse = await getReleasedMovies();
     const genresResponse = await getGenres();
     const artistsResponse = await getArtists();
@@ -240,6 +253,9 @@ const Home = (props) => {
     const genresList = [];
     const artistsList = [];
     moviesResponse.movies.map((movie) => {
+      movieList.push(movie);
+    });
+    publishedMoviesResponse.movies.map((movie) => {
       movieList.push(movie);
     });
     releasedMoviesResponse.movies.map((movie) => {
@@ -262,7 +278,7 @@ const Home = (props) => {
   return (
     <React.Fragment>
       <Grid container direction="row">
-        <Header baseUrl={props.baseUrl} />
+        <Header baseUrl={props.baseUrl} showBookMovie="false"/>
         <div className="homePageHeader">Upcoming Movies</div>
         <div className="containerDiv">
           <GridList cellHeight={250} cols={6} className="gridListStyle">

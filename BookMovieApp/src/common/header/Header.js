@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Header.css";
 import logo from "../../assets/logo.svg";
 import Button from "@mui/material/Button";
@@ -7,24 +7,41 @@ import LoginModal from "../loginModal/LoginModal";
 import {useHistory} from "react-router-dom";
 
 const Header = (props) => {
-  console.log("Inside header component");
   let headerMenu = "";
   const [isLogin, setLogin] = useState(false);
-  const [showBookMovie, setShowBookMovie] = useState(true);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const history = useHistory;
+  const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
+  const history = useHistory();
 
   const loginHandler = () => {
     setLogin(true);
+    setShowLoginModal(true);
   };
 
   const logoutHandler = () => {
+    const requestObj = {}
     setLogin(false);
+
+    // TODO Add authorization header
+    const serviceRequest = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+
+    fetch("http://localhost:8085/api/v1/auth/logout", serviceRequest)
+      .then((response) => {
+        response.json();
+      })
+      .then((data) => setIsLogoutSuccess(true));
   };
 
   const bookShowHandler = () => {
     if (isLogin) {
-      // Display information
+      // Get the movie Id from the URL
+      const parts = window.location.href.split("/");
+      const paramId = parts[parts.length - 1];
+      console.log(paramId);
+      history.push("/bookshow/"+paramId);
     } else {
       // Login modal
       console.log("open login");
@@ -49,7 +66,7 @@ const Header = (props) => {
           sx={{ mx: 3 }}
           className="buttonStyle"
         >
-          {showBookMovie && (
+          {props.showBookMovie && (
             <Button
               variant="contained"
               aria-label="BookShow"
@@ -87,7 +104,7 @@ const Header = (props) => {
       </div>
     </React.Fragment>
   );
-
+       
   return headerMenu;
 };
 
