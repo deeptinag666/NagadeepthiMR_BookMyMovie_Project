@@ -7,24 +7,31 @@ import Header from "../../common/header/Header";
 
 const Details = (props) => {
   console.log(props.baseUrl);
+  console.log("details page");
   const [movieDetails, setMovieDetails] = useState({});
 
+  const getMovieDetails = async () => {
+    const movieUrl = "http://localhost:8085/api/v1/movies/" + props.match.params.id;
+    const response = await fetch(movieUrl);
+    return await response.json();
+  };
+
   useEffect(() => {
-      //const movieUrl = props.baseUrl + "movies/" + props.match.params.id;
-      const movieUrl = "http://localhost:8085/api/v1/movies/" + props.match.params.id;
-      console.log(movieUrl);
-    fetch(movieUrl, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        "Cache-Control": "no-cache",
-      },
-    })
-      .then((response) => response.json())
-      .then((response) => {
-        setMovieDetails(response);
-        console.log(movieDetails);
-      });
+    //   //const movieUrl = props.baseUrl + "movies/" + props.match.params.id;
+    //   const movieUrl = "http://localhost:8085/api/v1/movies/" + props.match.params.id;
+    //   console.log(movieUrl);
+    // fetch(movieUrl, {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     "Cache-Control": "no-cache",
+    //   },
+    // })
+    //   .then((response) => response.json())
+    //   .then((response) => {
+    //     setMovieDetails(response);
+    //     console.log(movieDetails);
+    //   });
   }, []);
 
   return (

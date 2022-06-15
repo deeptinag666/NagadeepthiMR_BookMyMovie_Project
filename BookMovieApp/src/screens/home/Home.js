@@ -14,7 +14,6 @@ import {
   Checkbox,
   ListItemText,
   InputLabel,
-  Link,
 } from "@mui/material";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
@@ -27,6 +26,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { Button } from "@mui/material";
+import { Link } from "react-router-dom";
 import {useHistory} from "react-router-dom";
 
 const Home = (props) => {
@@ -41,7 +41,6 @@ const Home = (props) => {
   const [releaseStartDate, setReleaseStartDate] = useState(null);
   const [releaseEndDate, setReleaseEndDate] = useState(null);
   const [selectedReleasedMovie, setSelectedReleasedMovie] = useState({});
-
   const history = useHistory();
 
   const theme = createTheme({
@@ -127,7 +126,7 @@ const Home = (props) => {
 
   const applySearchHandler = () => {
     console.log("apply pressed");
-    console.log(releaseStartDate);
+    console.log(selectedMovie);
     if (
       selectedMovie === "" &&
       selectedGenres.length === 0 &&
@@ -163,10 +162,10 @@ const Home = (props) => {
         });
 
         // Check if release date is between the start date and end date
-        let isWithinReleaseDateRange = true;
+        let isWithinReleaseDateRange = false;
 
         // Check if the date range matches
-        if (releaseStartDate) {
+        if (releaseStartDate && releaseEndDate === null) {
           const relStartDate = new Date(releaseStartDate);
           const relStartDateFinal =
             relStartDate.getFullYear() +
@@ -175,12 +174,10 @@ const Home = (props) => {
             "-" +
             relStartDate.getDate();
 
-          if (Date.parse(movie.release_date) < Date.parse(relStartDateFinal)) {
-            isWithinReleaseDateRange = false;
+          if (Date.parse(movie.release_date) >= Date.parse(relStartDateFinal)) {
+            isWithinReleaseDateRange = true;
           }
-        }
-
-        if (releaseEndDate) {
+        } else if (releaseEndDate && releaseStartDate === null) {
           const relEndDate = new Date(releaseEndDate);
           const relEndDateFinal =
             relEndDate.getFullYear() +
@@ -189,8 +186,34 @@ const Home = (props) => {
             "-" +
             relEndDate.getDate();
 
-          if (Date.parse(movie.release_date) > Date.parse(relEndDateFinal)) {
-            isWithinReleaseDateRange = false;
+          console.log(Date.parse(relEndDateFinal));
+          console.log(Date.parse(movie.release_date));
+          if (Date.parse(movie.release_date) <= Date.parse(relEndDateFinal)) {
+            isWithinReleaseDateRange = true;
+          }
+        } else if (releaseStartDate && releaseEndDate) {
+          const relStartDate = new Date(releaseStartDate);
+          const relStartDateFinal =
+            relStartDate.getFullYear() +
+            "-" +
+            (relStartDate.getMonth() + 1) +
+            "-" +
+            relStartDate.getDate();
+
+          const relEndDate = new Date(releaseEndDate);
+          const relEndDateFinal =
+            relEndDate.getFullYear() +
+            "-" +
+            (relEndDate.getMonth() + 1) +
+            "-" +
+            relEndDate.getDate();
+
+          const movieRelDate = Date.parse(movie.release_date);
+          if (
+            movieRelDate >= Date.parse(relStartDateFinal) &&
+            movieRelDate <= Date.parse(relEndDateFinal)
+          ) {
+            isWithinReleaseDateRange = true;
           }
         }
 
@@ -200,6 +223,7 @@ const Home = (props) => {
           areArtistsPresent ||
           isWithinReleaseDateRange
         ) {
+          console.log(movie);
           return movie;
         }
       });
@@ -263,21 +287,22 @@ const Home = (props) => {
           <div className="containerReleaseDiv">
             <GridList cellHeight={350} cols={4}>
               {filteredMovieList.map((movie) => (
-                <GridListTile
-                  className="releaseMovieGridTile"
-                  key={movie.poster_url}
-                  onClick={() => {
-                    setSelectedReleasedMovie(movie);
-                    console.log(selectedReleasedMovie);
-                    history.push("/movie/:"+movie.id);
-                  }}
-                >
-                  <img src={movie.poster_url} alt={movie.title} />
-                  <GridListTileBar
-                    title={movie.title}
-                    subtitle={<span>Release Date: {movie.release_date}</span>}
-                  />
-                </GridListTile>
+                // <Link to={"/movies/" + movie.id}>
+                  <GridListTile
+                    className="releaseMovieGridTile"
+                    key={movie.poster_url}
+                    onClick={() => {
+                      setSelectedReleasedMovie(movie);
+                      console.log(selectedReleasedMovie);
+                      history.push("/movies/:"+movie.id);
+                    }}
+                  >
+                    <img src={movie.poster_url} alt={movie.title} />
+                    <GridListTileBar
+                      title={movie.title}
+                      subtitle={<span>Release Date: {movie.release_date}</span>}
+                    />
+                  </GridListTile>
               ))}
             </GridList>
           </div>
