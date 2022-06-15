@@ -14,6 +14,7 @@ import {
   Checkbox,
   ListItemText,
   InputLabel,
+  Link,
 } from "@mui/material";
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
@@ -26,6 +27,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import { Button } from "@mui/material";
+import {useHistory} from "react-router-dom";
 
 const Home = (props) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState([]);
@@ -38,6 +40,9 @@ const Home = (props) => {
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [releaseStartDate, setReleaseStartDate] = useState(null);
   const [releaseEndDate, setReleaseEndDate] = useState(null);
+  const [selectedReleasedMovie, setSelectedReleasedMovie] = useState({});
+
+  const history = useHistory();
 
   const theme = createTheme({
     palette: createPalette({
@@ -130,7 +135,7 @@ const Home = (props) => {
       releaseStartDate === null &&
       releaseEndDate === null
     ) {
-      console.log('inside if');
+      console.log("inside if");
       setFilteredMovieList(releasedMoviesList);
     } else {
       const filteredReleasedMovies = filteredMovieList.filter((movie) => {
@@ -161,20 +166,30 @@ const Home = (props) => {
         let isWithinReleaseDateRange = true;
 
         // Check if the date range matches
-        if(releaseStartDate){
+        if (releaseStartDate) {
           const relStartDate = new Date(releaseStartDate);
-          const relStartDateFinal = relStartDate.getFullYear() + '-' + (relStartDate.getMonth() + 1) + '-' + relStartDate.getDate();
+          const relStartDateFinal =
+            relStartDate.getFullYear() +
+            "-" +
+            (relStartDate.getMonth() + 1) +
+            "-" +
+            relStartDate.getDate();
 
-          if(Date.parse(movie.release_date) < Date.parse(relStartDateFinal)){
+          if (Date.parse(movie.release_date) < Date.parse(relStartDateFinal)) {
             isWithinReleaseDateRange = false;
           }
         }
 
-        if(releaseEndDate){
+        if (releaseEndDate) {
           const relEndDate = new Date(releaseEndDate);
-          const relEndDateFinal = relEndDate.getFullYear() + '-' + (relEndDate.getMonth() + 1) + '-' + relEndDate.getDate();
+          const relEndDateFinal =
+            relEndDate.getFullYear() +
+            "-" +
+            (relEndDate.getMonth() + 1) +
+            "-" +
+            relEndDate.getDate();
 
-          if(Date.parse(movie.release_date) > Date.parse(relEndDateFinal)){
+          if (Date.parse(movie.release_date) > Date.parse(relEndDateFinal)) {
             isWithinReleaseDateRange = false;
           }
         }
@@ -190,6 +205,11 @@ const Home = (props) => {
       });
       setFilteredMovieList(filteredReleasedMovies);
     }
+  };
+
+  const movieClickHandler = () => {
+    console.log("movie click handler");
+    //navigate("/movie/");
   };
 
   useEffect(async () => {
@@ -246,6 +266,11 @@ const Home = (props) => {
                 <GridListTile
                   className="releaseMovieGridTile"
                   key={movie.poster_url}
+                  onClick={() => {
+                    setSelectedReleasedMovie(movie);
+                    console.log(selectedReleasedMovie);
+                    history.push("/movie/:"+movie.id);
+                  }}
                 >
                   <img src={movie.poster_url} alt={movie.title} />
                   <GridListTileBar
