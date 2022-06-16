@@ -12,7 +12,7 @@ const Header = (props) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
   const history = useHistory();
-  
+
   const loginHandler = () => {
     setLogin(true);
     setShowLoginModal(true);
@@ -34,7 +34,7 @@ const Header = (props) => {
       },
     };
 
-    fetch("http://localhost:8085/api/v1/auth/logout", serviceRequest)
+    fetch(props.baseUrl + "auth/logout", serviceRequest)
       .then((response) => {
         response.json();
       })

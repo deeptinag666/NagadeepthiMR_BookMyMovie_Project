@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Header from "../../common/header/Header";
 import Youtube from "react-youtube";
-import Rating from '@mui/material/Rating';
+import Rating from "@mui/material/Rating";
 import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
 
 const Details = (props) => {
@@ -31,8 +31,7 @@ const Details = (props) => {
 
   const getMovieDetails = async () => {
     console.log(props);
-    const movieUrl =
-      "http://localhost:8085/api/v1/movies/" + props.match.params.id;
+    const movieUrl = props.baseUrl + "movies/" + props.match.params.id;
     const response = await fetch(movieUrl);
     return await response.json();
   };
@@ -58,7 +57,7 @@ const Details = (props) => {
   return (
     <div className="detailPageStyle">
       <div>
-        <Header baseUrl={props.baseUrl} showBookMovie={true}/>
+        <Header baseUrl={props.baseUrl} showBookMovie={true} />
       </div>
       <br />
       <div className="backToHome">
@@ -67,14 +66,16 @@ const Details = (props) => {
         </Typography>
       </div>
       <Grid container spacing={2} style={{ width: "100%" }}>
-        <Grid item style={{ width: "20%", marginTop: 10}}>
+        <Grid item style={{ width: "20%", marginTop: 10 }}>
           <img src={movieDetails.poster_url} alt={movieDetails.title} />
         </Grid>
         <Grid item style={{ width: "60%" }}>
           <Typography variant="h2">{movieDetails.title}</Typography>
           <Stack direction="row" spacing={1}>
             <Typography sx={{ fontWeight: 600 }}>Genre:</Typography>
-            <Typography variant="body1">{movieDetails.genres && movieDetails.genres.join(", ")}</Typography>
+            <Typography variant="body1">
+              {movieDetails.genres && movieDetails.genres.join(", ")}
+            </Typography>
           </Stack>
           <Stack direction="row" spacing={1}>
             <Typography sx={{ fontWeight: 600 }}>Duration:</Typography>
@@ -106,19 +107,31 @@ const Details = (props) => {
         </Grid>
         <Grid item style={{ width: "20%" }}>
           <Typography sx={{ fontWeight: 600 }}>Rate this movie:</Typography>
-            <Rating name="Simple" value={movieRating} onChange={(event, newValue) => {
-                setMovieRating(newValue);
-            }}/>
+          <Rating
+            name="Simple"
+            value={movieRating}
+            onChange={(event, newValue) => {
+              setMovieRating(newValue);
+            }}
+          />
           <br />
           <Typography sx={{ fontWeight: 600 }}>Artists:</Typography>
-            <GridList cols={2}>
-            {movieDetails.artists && movieDetails.artists.map((artist) => (
-              <GridListTile key={artist.first_name.concat(" ", artist.last_name)}>
-                <img src={artist.profile_url} alt={artist.first_name.concat(" ", artist.last_name)} />
-                <GridListTileBar title={artist.first_name.concat(" ", artist.last_name)} />
-              </GridListTile>
-            ))}
-            </GridList>
+          <GridList cols={2}>
+            {movieDetails.artists &&
+              movieDetails.artists.map((artist) => (
+                <GridListTile
+                  key={artist.first_name.concat(" ", artist.last_name)}
+                >
+                  <img
+                    src={artist.profile_url}
+                    alt={artist.first_name.concat(" ", artist.last_name)}
+                  />
+                  <GridListTileBar
+                    title={artist.first_name.concat(" ", artist.last_name)}
+                  />
+                </GridListTile>
+              ))}
+          </GridList>
         </Grid>
       </Grid>
     </div>

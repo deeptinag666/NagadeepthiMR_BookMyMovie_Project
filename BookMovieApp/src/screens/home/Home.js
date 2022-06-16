@@ -53,7 +53,7 @@ const Home = (props) => {
   const getMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8085/api/v1/movies"
+        props.baseUrl + "movies"
       );
       return await response.json();
     } catch (error) {
@@ -65,7 +65,7 @@ const Home = (props) => {
   const getPublishedMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8085/api/v1/movies?status=PUBLISHED"
+        props.baseUrl + "movies?status=PUBLISHED"
       );
       return await response.json();
     } catch (error) {
@@ -77,7 +77,7 @@ const Home = (props) => {
   const getReleasedMovies = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8085/api/v1/movies?status=RELEASED"
+        props.baseUrl + "movies?status=RELEASED"
       );
       return await response.json();
     } catch (error) {
@@ -88,7 +88,7 @@ const Home = (props) => {
 
   const getGenres = async () => {
     try {
-      const response = await fetch("http://localhost:8085/api/v1/genres");
+      const response = await fetch(props.baseUrl + "genres");
       return await response.json();
     } catch (error) {
       console.error(error);
@@ -99,7 +99,7 @@ const Home = (props) => {
   const getArtists = async () => {
     try {
       const response = await fetch(
-        "http://localhost:8085/api/v1/artists?page=1&limit=10"
+        props.baseUrl + "artists?page=1&limit=10"
       );
       return await response.json();
     } catch (error) {
@@ -252,9 +252,7 @@ const Home = (props) => {
     const releasedMoviesList = [];
     const genresList = [];
     const artistsList = [];
-    moviesResponse.movies.map((movie) => {
-      movieList.push(movie);
-    });
+
     publishedMoviesResponse.movies.map((movie) => {
       movieList.push(movie);
     });

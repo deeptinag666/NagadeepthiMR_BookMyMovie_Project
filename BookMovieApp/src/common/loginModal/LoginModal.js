@@ -155,7 +155,7 @@ const LoginModal = (props) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestObj),
     };
-    fetch("http://localhost:8085/api/v1/signup", serviceRequest)
+    fetch(props.baseUrl + "signup", serviceRequest)
       .then((response) => {
         response.json();
       })
@@ -172,8 +172,7 @@ const LoginModal = (props) => {
       },
     };
 
-    fetch("http://localhost:8085/api/v1/auth/login", serviceRequest)
-    // fetch(props.baseUrl + "auth/login", serviceRequest)
+    fetch(props.baseUrl + "auth/login", serviceRequest)
       .then((response) => {
         response.json();
       })
