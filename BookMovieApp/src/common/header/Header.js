@@ -12,8 +12,7 @@ const Header = (props) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
   const history = useHistory();
-  console.log(props);
-
+  
   const loginHandler = () => {
     setLogin(true);
     setShowLoginModal(true);
@@ -107,7 +106,7 @@ const Header = (props) => {
             </Button>
           )}
         </Stack>
-        <LoginModal showModal={showLoginModal} closeModal={closeLoginModal} />
+        <LoginModal baseUrl={props.baseUrl} showModal={showLoginModal} closeModal={closeLoginModal} />
       </div>
     </React.Fragment>
   );

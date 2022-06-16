@@ -278,7 +278,7 @@ const Home = (props) => {
   return (
     <React.Fragment>
       <Grid container direction="row">
-        <Header baseUrl={props.baseUrl} showBookMovie="false"/>
+        <Header baseUrl={props.baseUrl} showBookMovie={false}/>
         <div className="homePageHeader">Upcoming Movies</div>
         <div className="containerDiv">
           <GridList cellHeight={250} cols={6} className="gridListStyle">

@@ -58,7 +58,7 @@ const Details = (props) => {
   return (
     <div className="detailPageStyle">
       <div>
-        <Header baseUrl={props.baseUrl} showBookMovie="true"/>
+        <Header baseUrl={props.baseUrl} showBookMovie={true}/>
       </div>
       <br />
       <div className="backToHome">

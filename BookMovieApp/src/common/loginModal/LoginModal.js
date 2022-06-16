@@ -163,20 +163,23 @@ const LoginModal = (props) => {
   };
 
   const loginHandler = () => {
+    const token = btoa(signInUsername + ":" + signInPassword);
     const serviceRequest = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Basic" + btoa(signInUsername + ":" + signInPassword),
+        "Authorization": "Basic" + token,
       },
     };
 
     fetch("http://localhost:8085/api/v1/auth/login", serviceRequest)
+    // fetch(props.baseUrl + "auth/login", serviceRequest)
       .then((response) => {
         response.json();
       })
       .then((data) => {
-        localStorage.setItem("token", data.token);
+        console.log(data);
+        localStorage.setItem("token", token);
         setIsLoginSuccess(true);
       });
   };
