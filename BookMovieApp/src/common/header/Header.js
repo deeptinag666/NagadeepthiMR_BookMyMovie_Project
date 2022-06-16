@@ -4,7 +4,7 @@ import logo from "../../assets/logo.svg";
 import Button from "@mui/material/Button";
 import { Stack } from "@mui/material";
 import LoginModal from "../loginModal/LoginModal";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Header = (props) => {
   let headerMenu = "";
@@ -12,6 +12,7 @@ const Header = (props) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
   const history = useHistory();
+  console.log(props);
 
   const loginHandler = () => {
     setLogin(true);
@@ -19,13 +20,19 @@ const Header = (props) => {
   };
 
   const logoutHandler = () => {
-    const requestObj = {}
+    const requestObj = {};
+    let token = "";
     setLogin(false);
 
-    // TODO Add authorization header
+    if (localStorage.token) {
+      token = localStorage.token;
+    }
     const serviceRequest = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        "Authorization": token,
+      },
     };
 
     fetch("http://localhost:8085/api/v1/auth/logout", serviceRequest)
@@ -41,7 +48,7 @@ const Header = (props) => {
       const parts = window.location.href.split("/");
       const paramId = parts[parts.length - 1];
       console.log(paramId);
-      history.push("/bookshow/"+paramId);
+      history.push("/bookshow/" + paramId);
     } else {
       // Login modal
       console.log("open login");
@@ -50,7 +57,7 @@ const Header = (props) => {
   };
 
   const closeLoginModal = () => {
-    console.log('closing modal');
+    console.log("closing modal");
     setShowLoginModal(false);
   };
 
@@ -100,11 +107,11 @@ const Header = (props) => {
             </Button>
           )}
         </Stack>
-        <LoginModal showModal={showLoginModal} closeModal={closeLoginModal}/>
+        <LoginModal showModal={showLoginModal} closeModal={closeLoginModal} />
       </div>
     </React.Fragment>
   );
-       
+
   return headerMenu;
 };
 

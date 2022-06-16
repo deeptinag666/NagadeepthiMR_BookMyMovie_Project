@@ -52,6 +52,8 @@ const LoginModal = (props) => {
     useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
   const [isLoginSuccess, setIsLoginSuccess] = useState(false);
+  const [signInUsername, setSignInUsername] = useState("");
+  const [signInPassword, setSignInPassword] = useState("");
 
   const modalStyles = {
     content: {
@@ -161,19 +163,30 @@ const LoginModal = (props) => {
   };
 
   const loginHandler = () => {
-    const requestObj = {}
-
-    // TODO Add authorization header
     const serviceRequest = {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Basic" + btoa(signInUsername + ":" + signInPassword),
+      },
     };
 
     fetch("http://localhost:8085/api/v1/auth/login", serviceRequest)
       .then((response) => {
         response.json();
       })
-      .then((data) => setIsLoginSuccess(true));
+      .then((data) => {
+        localStorage.setItem("token", data.token);
+        setIsLoginSuccess(true);
+      });
+  };
+
+  const usernameChangeHandler = (event) => {
+    setSignInUsername(event.target.value);
+  };
+
+  const signInPasswordChangeHandler = (event) => {
+    setSignInPassword(event.target.value);
   };
 
   return (
@@ -201,6 +214,8 @@ const LoginModal = (props) => {
               label="Username"
               variant="standard"
               required
+              value={signInUsername}
+              onChange={usernameChangeHandler}
             />
             <TextField
               sx={{ m: 1 }}
@@ -208,6 +223,8 @@ const LoginModal = (props) => {
               label="Password"
               variant="standard"
               required
+              value={signInPassword}
+              onChange={signInPasswordChangeHandler}
             />
             <Button
               sx={{ m: 5 }}
