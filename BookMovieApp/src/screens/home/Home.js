@@ -135,7 +135,6 @@ const Home = (props) => {
   };
 
   const applySearchHandler = () => {
-    console.log("apply pressed");
     console.log(selectedMovie);
     if (
       selectedMovie === "" &&
@@ -144,7 +143,6 @@ const Home = (props) => {
       releaseStartDate === null &&
       releaseEndDate === null
     ) {
-      console.log("inside if");
       setFilteredMovieList(releasedMoviesList);
     } else {
       const filteredReleasedMovies = filteredMovieList.filter((movie) => {
@@ -196,8 +194,6 @@ const Home = (props) => {
             "-" +
             relEndDate.getDate();
 
-          console.log(Date.parse(relEndDateFinal));
-          console.log(Date.parse(movie.release_date));
           if (Date.parse(movie.release_date) <= Date.parse(relEndDateFinal)) {
             isWithinReleaseDateRange = true;
           }
@@ -233,7 +229,6 @@ const Home = (props) => {
           areArtistsPresent ||
           isWithinReleaseDateRange
         ) {
-          console.log(movie);
           return movie;
         }
       });
@@ -242,7 +237,6 @@ const Home = (props) => {
   };
 
   useEffect(async () => {
-    console.log("inside useeffect hook");
     const moviesResponse = await getMovies();
     const publishedMoviesResponse = await getPublishedMovies();
     const releasedMoviesResponse = await getReleasedMovies();

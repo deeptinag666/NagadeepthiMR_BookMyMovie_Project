@@ -214,7 +214,7 @@ const LoginModal = (props) => {
           <Tab label="Register" />
         </Tabs>
         <TabPanel value={value} index={0}>
-          <FormControl fullWidth="true">
+          <FormControl fullWidth={true}>
             <TextField
               sx={{ m: 1 }}
               id="standard-basic"
