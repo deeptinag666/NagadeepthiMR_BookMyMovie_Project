@@ -9,8 +9,6 @@ import Rating from "@mui/material/Rating";
 import { GridList, GridListTile, GridListTileBar } from "@material-ui/core";
 
 const Details = (props) => {
-  console.log(props.baseUrl);
-  console.log("details page");
   const [movieDetails, setMovieDetails] = useState({});
   const [releaseDate, setReleaseDate] = useState("");
   const [videoId, setVideoId] = useState("");
@@ -30,7 +28,6 @@ const Details = (props) => {
   };
 
   const getMovieDetails = async () => {
-    console.log(props);
     const movieUrl = props.baseUrl + "movies/" + props.match.params.id;
     const response = await fetch(movieUrl);
     return await response.json();

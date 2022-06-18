@@ -176,7 +176,6 @@ const LoginModal = (props) => {
 
     if(response.status === 200){
       for (var pair of response.headers.entries()) {
-        console.log(pair[0]+ ': '+ pair[1]);
         if(pair[0] == "access-token"){
           localStorage.setItem("token", pair[1]);
         }
@@ -201,6 +200,7 @@ const LoginModal = (props) => {
       isOpen={props.showModal}
       style={modalStyles}
       onRequestClose={props.closeModal}
+      ariaHideApp={false}
     >
       <Box sx={{ width: "100%" }}>
         <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
