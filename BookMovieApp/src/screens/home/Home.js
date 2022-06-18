@@ -25,7 +25,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Home = (props) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState([]);
@@ -52,9 +52,7 @@ const Home = (props) => {
 
   const getMovies = async () => {
     try {
-      const response = await fetch(
-        props.baseUrl + "movies"
-      );
+      const response = await fetch(props.baseUrl + "movies");
       return await response.json();
     } catch (error) {
       console.error(error);
@@ -64,21 +62,17 @@ const Home = (props) => {
 
   const getPublishedMovies = async () => {
     try {
-      const response = await fetch(
-        props.baseUrl + "movies?status=PUBLISHED"
-      );
+      const response = await fetch(props.baseUrl + "movies?status=PUBLISHED");
       return await response.json();
     } catch (error) {
       console.error(error);
       return [];
     }
-  }
+  };
 
   const getReleasedMovies = async () => {
     try {
-      const response = await fetch(
-        props.baseUrl + "movies?status=RELEASED"
-      );
+      const response = await fetch(props.baseUrl + "movies?status=RELEASED");
       return await response.json();
     } catch (error) {
       console.error(error);
@@ -98,9 +92,7 @@ const Home = (props) => {
 
   const getArtists = async () => {
     try {
-      const response = await fetch(
-        props.baseUrl + "artists?page=1&limit=10"
-      );
+      const response = await fetch(props.baseUrl + "artists?page=1&limit=10");
       return await response.json();
     } catch (error) {
       console.error(error);
@@ -270,7 +262,7 @@ const Home = (props) => {
   return (
     <React.Fragment>
       <Grid container direction="row">
-        <Header baseUrl={props.baseUrl} showBookMovie={false}/>
+        <Header baseUrl={props.baseUrl} showBookMovie={false} />
         <div className="homePageHeader">Upcoming Movies</div>
         <div className="containerDiv">
           <GridList cellHeight={250} cols={6} className="gridListStyle">
@@ -288,22 +280,24 @@ const Home = (props) => {
           <div className="containerReleaseDiv">
             <GridList cellHeight={350} cols={4}>
               {filteredMovieList.map((movie) => (
-                  <GridListTile
-                    className="releaseMovieGridTile"
-                    key={movie.poster_url}
+                <GridListTile
+                  className="releaseMovieGridTile"
+                  key={movie.poster_url}
+                  cols={filteredMovieList.length == 1 ? 4 : 1}
+                  spacing={2}
+                  onClick={() => {
+                    setSelectedReleasedMovie(movie);
+                    console.log(selectedReleasedMovie);
+                    history.push("/movie/" + movie.id);
+                  }}
+                >
+                  <img src={movie.poster_url} alt={movie.title} />
+                  <GridListTileBar
                     spacing={2}
-                    onClick={() => {
-                      setSelectedReleasedMovie(movie);
-                      console.log(selectedReleasedMovie);
-                      history.push("/movie/"+movie.id);
-                    }}
-                  >
-                    <img src={movie.poster_url} alt={movie.title} />
-                    <GridListTileBar spacing={2}
-                      title={movie.title}
-                      subtitle={<span>Release Date: {movie.release_date}</span>}
-                    />
-                  </GridListTile>
+                    title={movie.title}
+                    subtitle={<span>Release Date: {movie.release_date}</span>}
+                  />
+                </GridListTile>
               ))}
             </GridList>
           </div>
