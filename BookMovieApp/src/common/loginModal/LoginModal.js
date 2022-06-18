@@ -63,6 +63,7 @@ const LoginModal = (props) => {
       bottom: "auto",
       marginRight: "-50%",
       transform: "translate(-50%, -50%)",
+      padding: "15px",
     },
   };
 
@@ -203,12 +204,15 @@ const LoginModal = (props) => {
       ariaHideApp={false}
     >
       <Box sx={{ width: "100%" }}>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}></Box>
         <Tabs
           value={value}
+          textColor="gray"
           onChange={handleTabChange}
-          textColor="primary"
-          indicatorColor="primary"
+          TabIndicatorProps={{
+            style: {
+              backgroundColor: "red",
+              color: "gray",
+          },}}
         >
           <Tab label="Login" />
           <Tab label="Register" />
