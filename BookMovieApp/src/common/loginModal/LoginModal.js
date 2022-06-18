@@ -151,7 +151,7 @@ const LoginModal = (props) => {
     };
 
     const serviceRequest = {
-      method: "PUT",
+      method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(requestObj),
     };
@@ -162,25 +162,27 @@ const LoginModal = (props) => {
       .then((data) => setRegistrationSuccess(true));
   };
 
-  const loginHandler = () => {
-    const token = btoa(signInUsername + ":" + signInPassword);
+  const loginHandler = async () => {
+    console.log(signInUsername);
+    console.log(signInPassword);
+    const token = "Basic " + btoa(signInUsername + ":" + signInPassword);
     const serviceRequest = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": "Basic" + token,
+        "Authorization": token,
       },
     };
 
-    fetch(props.baseUrl + "auth/login", serviceRequest)
-      .then((response) => {
-        response.json();
-      })
-      .then((data) => {
-        console.log(data);
-        localStorage.setItem("token", token);
-        setIsLoginSuccess(true);
-      });
+    const response = await fetch(props.baseUrl + "auth/login", serviceRequest)
+    console.log(response);
+    if(response.status === 200){
+      localStorage.setItem("token", token);
+      setIsLoginSuccess(true);
+      props.closeModal();
+    }else{
+      console.error("Login failed");
+    }
   };
 
   const usernameChangeHandler = (event) => {

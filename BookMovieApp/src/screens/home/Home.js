@@ -297,6 +297,7 @@ const Home = (props) => {
                   <GridListTile
                     className="releaseMovieGridTile"
                     key={movie.poster_url}
+                    spacing={2}
                     onClick={() => {
                       setSelectedReleasedMovie(movie);
                       console.log(selectedReleasedMovie);
@@ -304,7 +305,7 @@ const Home = (props) => {
                     }}
                   >
                     <img src={movie.poster_url} alt={movie.title} />
-                    <GridListTileBar
+                    <GridListTileBar spacing={2}
                       title={movie.title}
                       subtitle={<span>Release Date: {movie.release_date}</span>}
                     />

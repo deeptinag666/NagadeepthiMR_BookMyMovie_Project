@@ -14,7 +14,6 @@ const Header = (props) => {
   const history = useHistory();
 
   const loginHandler = () => {
-    setLogin(true);
     setShowLoginModal(true);
   };
 
@@ -57,6 +56,9 @@ const Header = (props) => {
 
   const closeLoginModal = () => {
     console.log("closing modal");
+    if (localStorage.token) {
+      setLogin(true);
+    }
     setShowLoginModal(false);
   };
 
