@@ -10,17 +10,23 @@ const Header = (props) => {
   let headerMenu = "";
   const [isLogin, setLogin] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const [isLogoutSuccess, setIsLogoutSuccess] = useState(false);
   const history = useHistory();
+
+  useEffect(() => {
+    if (localStorage && localStorage.token) {
+      setLogin(true);
+    }else{
+      setLogin(false);
+    }
+  }, [])
 
   const loginHandler = () => {
     setShowLoginModal(true);
   };
 
-  const logoutHandler = () => {
+  const logoutHandler = async () => {
     const requestObj = {};
     let token = "";
-    setLogin(false);
 
     if (localStorage.token) {
       token = localStorage.token;
@@ -29,15 +35,15 @@ const Header = (props) => {
       method: "POST",
       headers: { 
         "Content-Type": "application/json",
-        "Authorization": token,
+        "Authorization": "Bearer " + token,
       },
     };
 
-    fetch(props.baseUrl + "auth/logout", serviceRequest)
-      .then((response) => {
-        response.json();
-      })
-      .then((data) => setIsLogoutSuccess(true));
+    const response = await fetch(props.baseUrl + "auth/logout", serviceRequest);
+    if(response.status === 200){
+      localStorage.clear();
+      setLogin(false);
+    }
   };
 
   const bookShowHandler = () => {
@@ -45,17 +51,14 @@ const Header = (props) => {
       // Get the movie Id from the URL
       const parts = window.location.href.split("/");
       const paramId = parts[parts.length - 1];
-      console.log(paramId);
       history.push("/bookshow/" + paramId);
     } else {
       // Login modal
-      console.log("open login");
       setShowLoginModal(true);
     }
   };
 
   const closeLoginModal = () => {
-    console.log("closing modal");
     if (localStorage.token) {
       setLogin(true);
     }

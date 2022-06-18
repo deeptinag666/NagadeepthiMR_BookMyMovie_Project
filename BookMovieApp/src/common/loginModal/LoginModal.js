@@ -163,8 +163,6 @@ const LoginModal = (props) => {
   };
 
   const loginHandler = async () => {
-    console.log(signInUsername);
-    console.log(signInPassword);
     const token = "Basic " + btoa(signInUsername + ":" + signInPassword);
     const serviceRequest = {
       method: "POST",
@@ -175,9 +173,14 @@ const LoginModal = (props) => {
     };
 
     const response = await fetch(props.baseUrl + "auth/login", serviceRequest)
-    console.log(response);
+
     if(response.status === 200){
-      localStorage.setItem("token", token);
+      for (var pair of response.headers.entries()) {
+        console.log(pair[0]+ ': '+ pair[1]);
+        if(pair[0] == "access-token"){
+          localStorage.setItem("token", pair[1]);
+        }
+      }
       setIsLoginSuccess(true);
       props.closeModal();
     }else{
