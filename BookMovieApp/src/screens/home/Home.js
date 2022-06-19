@@ -50,16 +50,6 @@ const Home = (props) => {
   });
   theme.spacing(2);
 
-  const getMovies = async () => {
-    try {
-      const response = await fetch(props.baseUrl + "movies");
-      return await response.json();
-    } catch (error) {
-      console.error(error);
-      return [];
-    }
-  };
-
   const getPublishedMovies = async () => {
     try {
       const response = await fetch(props.baseUrl + "movies?status=PUBLISHED");
@@ -226,7 +216,6 @@ const Home = (props) => {
   };
 
   useEffect(async () => {
-    const moviesResponse = await getMovies();
     const publishedMoviesResponse = await getPublishedMovies();
     const releasedMoviesResponse = await getReleasedMovies();
     const genresResponse = await getGenres();

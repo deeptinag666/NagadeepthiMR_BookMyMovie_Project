@@ -15,10 +15,10 @@ const Header = (props) => {
   useEffect(() => {
     if (localStorage && localStorage.token) {
       setLogin(true);
-    }else{
+    } else {
       setLogin(false);
     }
-  }, [])
+  }, []);
 
   const loginHandler = () => {
     setShowLoginModal(true);
@@ -33,14 +33,14 @@ const Header = (props) => {
     }
     const serviceRequest = {
       method: "POST",
-      headers: { 
+      headers: {
         "Content-Type": "application/json",
-        "Authorization": "Bearer " + token,
+        Authorization: "Bearer " + token,
       },
     };
 
     const response = await fetch(props.baseUrl + "auth/logout", serviceRequest);
-    if(response.status === 200){
+    if (response.status === 200) {
       localStorage.clear();
       setLogin(false);
     }
@@ -68,9 +68,15 @@ const Header = (props) => {
   headerMenu = (
     <React.Fragment>
       <div className="headerStyle">
-        <a href={props.baseUrl}>
+        <img
+          className="logoStyle rotate linear infinite"
+          src={logo}
+          alt="Header Logo"
+        />
+        {/* <img className="logoStyle" src={logo} alt="Header Logo" /> */}
+        {/* <a href={props.baseUrl}>
           <img className="logoStyle" src={logo} alt="Header Logo" />
-        </a>
+        </a> */}
         <Stack
           spacing={2}
           direction="row"
@@ -111,7 +117,11 @@ const Header = (props) => {
             </Button>
           )}
         </Stack>
-        <LoginModal baseUrl={props.baseUrl} showModal={showLoginModal} closeModal={closeLoginModal} />
+        <LoginModal
+          baseUrl={props.baseUrl}
+          showModal={showLoginModal}
+          closeModal={closeLoginModal}
+        />
       </div>
     </React.Fragment>
   );

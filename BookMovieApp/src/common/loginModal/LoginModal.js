@@ -51,7 +51,6 @@ const LoginModal = (props) => {
   const [contactNumberErrorMessage, setContactNumberErrorMessage] =
     useState("");
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
-  const [isLoginSuccess, setIsLoginSuccess] = useState(false);
   const [signInUsername, setSignInUsername] = useState("");
   const [signInPassword, setSignInPassword] = useState("");
 
@@ -181,7 +180,6 @@ const LoginModal = (props) => {
           localStorage.setItem("token", pair[1]);
         }
       }
-      setIsLoginSuccess(true);
       props.closeModal();
     }else{
       console.error("Login failed");
