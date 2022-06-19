@@ -189,6 +189,7 @@ const BookShow = (props) => {
         showId,
       },
     });
+    console.log(props.history);
   };
 
   return (

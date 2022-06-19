@@ -206,17 +206,16 @@ const LoginModal = (props) => {
       <Box sx={{ width: "100%" }}>
         <Tabs
           value={value}
-          textColor="gray"
           onChange={handleTabChange}
           TabIndicatorProps={{
             style: {
               backgroundColor: "red",
-              color: "gray",
+              textColor: "gray",
           },}}
         >
           <Tab label="Login" />
           <Tab label="Register" />
-        </Tabs>
+        </Tabs> 
         <TabPanel value={value} index={0}>
           <FormControl fullWidth={true}>
             <TextField

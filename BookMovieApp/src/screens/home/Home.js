@@ -101,9 +101,7 @@ const Home = (props) => {
   };
 
   const selectMovieHandler = (event) => {
-    if (event.target.value !== "") {
-      setSelectedMovie(event.target.value);
-    }
+    setSelectedMovie(event.target.value);
   };
 
   const selectedGenresHandler = (event) => {
@@ -127,7 +125,6 @@ const Home = (props) => {
   };
 
   const applySearchHandler = () => {
-    console.log(selectedMovie);
     if (
       selectedMovie === "" &&
       selectedGenres.length === 0 &&
@@ -278,19 +275,19 @@ const Home = (props) => {
       <Grid container spacing={2} style={{ width: "100%" }}>
         <Grid item style={{ width: "76%" }}>
           <div className="containerReleaseDiv">
-            <GridList cellHeight={350} cols={4}>
+            <GridList cellHeight={350} 
+              cols={4}>
               {filteredMovieList.map((movie) => (
                 <GridListTile
                   className="releaseMovieGridTile"
                   key={movie.poster_url}
-                  cols={filteredMovieList.length == 1 ? 4 : 1}
+                  cols={filteredMovieList.length === 1 ? 4 : 1}
                   spacing={2}
                   onClick={() => {
                     setSelectedReleasedMovie(movie);
-                    console.log(selectedReleasedMovie);
                     history.push("/movie/" + movie.id);
                   }}
-                >
+                > 
                   <img src={movie.poster_url} alt={movie.title} />
                   <GridListTileBar
                     spacing={2}
