@@ -176,7 +176,7 @@ const LoginModal = (props) => {
 
     if(response.status === 200){
       for (var pair of response.headers.entries()) {
-        if(pair[0] == "access-token"){
+        if(pair[0] === "access-token"){
           localStorage.setItem("token", pair[1]);
         }
       }

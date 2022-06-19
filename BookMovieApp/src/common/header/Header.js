@@ -46,18 +46,6 @@ const Header = (props) => {
     }
   };
 
-  const bookShowHandler = () => {
-    if (isLogin) {
-      // Get the movie Id from the URL
-      const parts = window.location.href.split("/");
-      const paramId = parts[parts.length - 1];
-      history.push("/bookshow/" + paramId);
-    } else {
-      // Login modal
-      setShowLoginModal(true);
-    }
-  };
-
   const closeLoginModal = () => {
     if (localStorage.token) {
       setLogin(true);
@@ -73,10 +61,6 @@ const Header = (props) => {
           src={logo}
           alt="Header Logo"
         />
-        {/* <img className="logoStyle" src={logo} alt="Header Logo" /> */}
-        {/* <a href={props.baseUrl}>
-          <img className="logoStyle" src={logo} alt="Header Logo" />
-        </a> */}
         <Stack
           spacing={2}
           direction="row"
@@ -84,15 +68,22 @@ const Header = (props) => {
           className="buttonStyle"
         >
           {props.showBookMovie && (
-            <Button
-              variant="contained"
-              aria-label="BookShow"
-              color="primary"
-              size="medium"
-              onClick={bookShowHandler}
+            <a
+              onClick={() => {
+                const parts = window.location.href.split("/");
+                const paramId = parts[parts.length - 1];
+                window.location.href = "/bookshow/" + paramId;
+              }}
             >
-              Book Show
-            </Button>
+              <Button
+                variant="contained"
+                aria-label="BookShow"
+                color="primary"
+                size="medium"
+              >
+                Book Show
+              </Button>
+            </a>
           )}
           {isLogin && (
             <Button

@@ -9,7 +9,7 @@ const Controller = () => {
   const baseUrl = "/api/v1/";
 
   return (
-    <Router forceRefresh={true}>
+    <Router>
       <div className="main-container">
         <Route
           exact

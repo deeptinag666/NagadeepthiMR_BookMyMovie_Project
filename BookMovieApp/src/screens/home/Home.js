@@ -25,7 +25,6 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
-import { useHistory } from "react-router-dom";
 
 const Home = (props) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState([]);
@@ -38,8 +37,6 @@ const Home = (props) => {
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [releaseStartDate, setReleaseStartDate] = useState(null);
   const [releaseEndDate, setReleaseEndDate] = useState(null);
-  const [selectedReleasedMovie, setSelectedReleasedMovie] = useState({});
-  const history = useHistory();
 
   const theme = createTheme({
     palette: createPalette({
@@ -264,20 +261,17 @@ const Home = (props) => {
       <Grid container spacing={2} style={{ width: "100%" }}>
         <Grid item style={{ width: "76%" }}>
           <div className="containerReleaseDiv">
-            <GridList cellHeight={350} 
-              cols={4}>
+            <GridList cellHeight={350} cols={4}>
               {filteredMovieList.map((movie) => (
                 <GridListTile
                   className="releaseMovieGridTile"
                   key={movie.poster_url}
                   cols={filteredMovieList.length === 1 ? 4 : 1}
                   spacing={2}
-                  onClick={() => {
-                    setSelectedReleasedMovie(movie);
-                    history.push("/movie/" + movie.id);
-                  }}
-                > 
-                  <img src={movie.poster_url} alt={movie.title} />
+                >
+                  <a onClick={() => {window.location.href="/movie/" + movie.id}}>
+                    <img src={movie.poster_url} alt={movie.title} />
+                  </a>
                   <GridListTileBar
                     spacing={2}
                     title={movie.title}

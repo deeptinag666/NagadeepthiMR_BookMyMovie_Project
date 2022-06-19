@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./Details.css";
 import { Stack, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Header from "../../common/header/Header";
 import Youtube from "react-youtube";
@@ -59,7 +58,7 @@ const Details = (props) => {
       <br />
       <div className="backToHome">
         <Typography>
-          <Link to={"/"}>&#60; Back to Home Page</Link>
+          <a href="/">&#60; Back to Home Page</a>
         </Typography>
       </div>
       <Grid container spacing={2} style={{ width: "100%" }}>
