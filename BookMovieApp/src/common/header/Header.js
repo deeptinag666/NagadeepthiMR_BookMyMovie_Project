@@ -4,16 +4,14 @@ import logo from "../../assets/logo.svg";
 import Button from "@mui/material/Button";
 import { Stack } from "@mui/material";
 import LoginModal from "../loginModal/LoginModal";
-import { useHistory } from "react-router-dom";
 
 const Header = (props) => {
   let headerMenu = "";
   const [isLogin, setLogin] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
-  const history = useHistory();
 
   useEffect(() => {
-    if (localStorage && localStorage.token) {
+    if (sessionStorage && sessionStorage.token) {
       setLogin(true);
     } else {
       setLogin(false);
@@ -25,11 +23,10 @@ const Header = (props) => {
   };
 
   const logoutHandler = async () => {
-    const requestObj = {};
     let token = "";
 
-    if (localStorage.token) {
-      token = localStorage.token;
+    if (sessionStorage.token) {
+      token = sessionStorage.token;
     }
     const serviceRequest = {
       method: "POST",
@@ -41,13 +38,13 @@ const Header = (props) => {
 
     const response = await fetch(props.baseUrl + "auth/logout", serviceRequest);
     if (response.status === 200) {
-      localStorage.clear();
+      sessionStorage.clear();
       setLogin(false);
     }
   };
 
   const closeLoginModal = () => {
-    if (localStorage.token) {
+    if (sessionStorage.token) {
       setLogin(true);
     }
     setShowLoginModal(false);

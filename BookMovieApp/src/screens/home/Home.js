@@ -121,7 +121,7 @@ const Home = (props) => {
     ) {
       setFilteredMovieList(releasedMoviesList);
     } else {
-      const filteredReleasedMovies = filteredMovieList.filter((movie) => {
+      const filteredReleasedMovies = releasedMoviesList.filter((movie) => {
         // Check if movie name matches filter criteria
         let movieNameMatching = false;
         if (movie.title === selectedMovie) {
@@ -199,12 +199,27 @@ const Home = (props) => {
           }
         }
 
+        let shouldMovieBeReturned = true;
+        if (selectedMovie !== "" && !movieNameMatching) {
+          shouldMovieBeReturned = false;
+        }
+
+        if (selectedGenres.length > 0 && !areGenresPresent) {
+          shouldMovieBeReturned = false;
+        }
+
+        if (selectedArtists.length > 0 && !areArtistsPresent) {
+          shouldMovieBeReturned = false;
+        }
+
         if (
-          movieNameMatching ||
-          areGenresPresent ||
-          areArtistsPresent ||
-          isWithinReleaseDateRange
+          (releaseStartDate !== null || releaseEndDate !== null) &&
+          !isWithinReleaseDateRange
         ) {
+          shouldMovieBeReturned = false;
+        }
+
+        if (shouldMovieBeReturned) {
           return movie;
         }
       });
@@ -266,11 +281,18 @@ const Home = (props) => {
                 <GridListTile
                   className="releaseMovieGridTile"
                   key={movie.poster_url}
-                  cols={filteredMovieList.length === 1 ? 4 : 1}
                   spacing={2}
-                >
-                  <a onClick={() => {window.location.href="/movie/" + movie.id}}>
-                    <img src={movie.poster_url} alt={movie.title} />
+                  cols={filteredMovieList.length === 1 ? 4 : 1}
+                  >
+                  <a
+                    onClick={() => {
+                      window.location.href = "/movie/" + movie.id;
+                    }}
+                  >
+                    <img
+                      src={movie.poster_url}
+                      alt={movie.title}
+                    />
                   </a>
                   <GridListTileBar
                     spacing={2}
