@@ -79,7 +79,7 @@ const Home = (props) => {
 
   const getArtists = async () => {
     try {
-      const response = await fetch(props.baseUrl + "artists?page=1&limit=10");
+      const response = await fetch(props.baseUrl + "artists");
       return await response.json();
     } catch (error) {
       console.error(error);

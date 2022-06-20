@@ -39,7 +39,7 @@
 }
 
 .releaseMovieGridTile:hover {
-  cursor: grab;
+  cursor: pointer;
 }
 
 .cardFieldStyle {
