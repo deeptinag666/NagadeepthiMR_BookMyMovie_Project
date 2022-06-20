@@ -232,29 +232,12 @@ const Home = (props) => {
     const releasedMoviesResponse = await getReleasedMovies();
     const genresResponse = await getGenres();
     const artistsResponse = await getArtists();
-    const movieList = [];
-    const releasedMoviesList = [];
-    const genresList = [];
-    const artistsList = [];
 
-    publishedMoviesResponse.movies.map((movie) => {
-      movieList.push(movie);
-    });
-    releasedMoviesResponse.movies.map((movie) => {
-      releasedMoviesList.push(movie);
-    });
-    genresResponse.genres.map((genreData) => {
-      genresList.push(genreData);
-    });
-    artistsResponse.artists.map((artistData) => {
-      artistsList.push(artistData);
-    });
-
-    setUpcomingMoviesList(movieList);
-    setReleasedMoviesList(releasedMoviesList);
-    setFilteredMovieList(releasedMoviesList);
-    setGenres(genresList);
-    setArtists(artistsList);
+    setUpcomingMoviesList(publishedMoviesResponse.movies);
+    setReleasedMoviesList(releasedMoviesResponse.movies);
+    setFilteredMovieList(releasedMoviesResponse.movies);
+    setGenres(genresResponse.genres);
+    setArtists(artistsResponse.artists);
   }, []);
 
   return (
