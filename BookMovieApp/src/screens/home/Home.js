@@ -6,7 +6,6 @@ import {
   CardContent,
   CardHeader,
   Grid,
-  createTheme,
   FormControl,
   TextField,
   Select,
@@ -18,13 +17,17 @@ import {
 import GridList from "@material-ui/core/GridList";
 import GridListTile from "@material-ui/core/GridListTile";
 import GridListTileBar from "@material-ui/core/GridListTileBar";
-import { ThemeProvider } from "@emotion/react";
-import { blue } from "@mui/material/colors";
-import createPalette from "@material-ui/core/styles/createPalette";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { Button } from "@mui/material";
+import { withStyles } from "@material-ui/core/styles";
+
+const styles = (theme) => ({
+  cardHeaderStyle: {
+    color: theme.palette.primary.light,
+  },
+});
 
 const Home = (props) => {
   const [upcomingMoviesList, setUpcomingMoviesList] = useState([]);
@@ -37,15 +40,6 @@ const Home = (props) => {
   const [selectedArtists, setSelectedArtists] = useState([]);
   const [releaseStartDate, setReleaseStartDate] = useState(null);
   const [releaseEndDate, setReleaseEndDate] = useState(null);
-
-  const theme = createTheme({
-    palette: createPalette({
-      type: "light",
-      primary: blue,
-    }),
-    spacing: 4,
-  });
-  theme.spacing(2);
 
   const getPublishedMovies = async () => {
     try {
@@ -240,6 +234,8 @@ const Home = (props) => {
     setArtists(artistsResponse.artists);
   }, []);
 
+  const { classes } = props;
+
   return (
     <React.Fragment>
       <Grid container direction="row">
@@ -257,25 +253,20 @@ const Home = (props) => {
         </div>
       </Grid>
       <Grid container spacing={2} style={{ width: "100%" }}>
-        <Grid item style={{ width: "76%" }}>
-          <div className="containerReleaseDiv">
+        <Grid item style={{ width: "76%", marginTop: "16px" }}>
             <GridList cellHeight={350} cols={4}>
               {filteredMovieList.map((movie) => (
                 <GridListTile
                   className="releaseMovieGridTile"
                   key={movie.poster_url}
                   spacing={2}
-                  cols={filteredMovieList.length === 1 ? 4 : 1}
-                  >
+                >
                   <a
                     onClick={() => {
                       window.location.href = "/movie/" + movie.id;
                     }}
                   >
-                    <img
-                      src={movie.poster_url}
-                      alt={movie.title}
-                    />
+                    <img src={movie.poster_url} alt={movie.title} width="100%"/>
                   </a>
                   <GridListTileBar
                     spacing={2}
@@ -285,150 +276,146 @@ const Home = (props) => {
                 </GridListTile>
               ))}
             </GridList>
-          </div>
         </Grid>
         <Grid item style={{ width: "24%", marginTop: "10px" }}>
-          <ThemeProvider theme={theme}>
-            <Card variant="outlined">
-              <CardHeader
-                title="FIND MOVIES BY:"
-                titleTypographyProps={{ variant: "h7" }}
-              ></CardHeader>
-              <CardContent>
-                <FormControl>
-                  <TextField
-                    variant="standard"
-                    label="Movie Name"
-                    style={{ minWidth: "240px", maxWidth: "240px" }}
-                    value={selectedMovie}
-                    onChange={selectMovieHandler}
-                  ></TextField>
+          <Card variant="outlined">
+            <CardHeader
+              className={classes.cardHeaderStyle}
+              title="FIND MOVIES BY:"
+              titleTypographyProps={{ variant: "h7" }}
+            ></CardHeader>
+            <CardContent>
+              <FormControl>
+                <TextField
+                  variant="standard"
+                  label="Movie Name"
+                  style={{ minWidth: "240px", maxWidth: "240px" }}
+                  value={selectedMovie}
+                  onChange={selectMovieHandler}
+                ></TextField>
 
-                  <FormControl
-                    variant="standard"
-                    sx={{ mt: 3, minWidth: 240, maxWidth: 240 }}
+                <FormControl
+                  variant="standard"
+                  sx={{ mt: 3, minWidth: 240, maxWidth: 240 }}
+                >
+                  <InputLabel id="genresSelect">Genres</InputLabel>
+                  <Select
+                    labelId="genresSelect"
+                    multiple
+                    renderValue={(selected) => selected.join(", ")}
+                    value={selectedGenres}
+                    onChange={selectedGenresHandler}
                   >
-                    <InputLabel id="genresSelect">Genres</InputLabel>
-                    <Select
-                      labelId="genresSelect"
-                      multiple
-                      renderValue={(selected) => selected.join(", ")}
-                      value={selectedGenres}
-                      onChange={selectedGenresHandler}
-                    >
-                      {genres.map((genreInfo) => (
-                        <MenuItem key={genreInfo.genre} value={genreInfo.genre}>
-                          <Checkbox
-                            checked={
-                              selectedGenres.indexOf(genreInfo.genre) > -1
-                            }
-                          />
-                          <ListItemText primary={genreInfo.genre} />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl
-                    variant="standard"
-                    sx={{ mt: 3, minWidth: 240, maxWidth: 240 }}
-                  >
-                    <InputLabel id="artistsSelect">Artists</InputLabel>
-                    <Select
-                      labelId="artistsSelect"
-                      multiple
-                      renderValue={(selected) => selected.join(", ")}
-                      value={selectedArtists}
-                      onChange={selectedArtistsHandler}
-                    >
-                      {artists.map((artistInfo) => (
-                        <MenuItem
-                          key={artistInfo.first_name.concat(
-                            " ",
-                            artistInfo.last_name
-                          )}
-                          value={artistInfo.first_name.concat(
-                            " ",
-                            artistInfo.last_name
-                          )}
-                        >
-                          <Checkbox
-                            checked={
-                              selectedArtists.indexOf(
-                                artistInfo.first_name.concat(
-                                  " ",
-                                  artistInfo.last_name
-                                )
-                              ) > -1
-                            }
-                          />
-                          <ListItemText
-                            primary={artistInfo.first_name.concat(
-                              " ",
-                              artistInfo.last_name
-                            )}
-                          />
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-
-                  <FormControl
-                    variant="standard"
-                    sx={{ mt: 5, minWidth: 240, maxWidth: 240 }}
-                  >
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker
-                        views={["day", "month", "year"]}
-                        openTo="day"
-                        label="Release Date Start"
-                        value={releaseStartDate}
-                        onChange={(newValue) => {
-                          setReleaseStartDate(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField {...params} helperText={null} />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  </FormControl>
-                  <FormControl
-                    variant="standard"
-                    sx={{ mt: 5, minWidth: 240, maxWidth: 240 }}
-                  >
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                      <DatePicker
-                        views={["day", "month", "year"]}
-                        openTo="day"
-                        label="Release Date End"
-                        value={releaseEndDate}
-                        onChange={(newValue) => {
-                          setReleaseEndDate(newValue);
-                        }}
-                        renderInput={(params) => (
-                          <TextField {...params} helperText={null} />
-                        )}
-                      />
-                    </LocalizationProvider>
-                  </FormControl>
-                  <Button
-                    variant="contained"
-                    aria-label="Apply"
-                    color="primary"
-                    size="large"
-                    sx={{ mt: 5 }}
-                    onClick={applySearchHandler}
-                  >
-                    APPLY
-                  </Button>
+                    {genres.map((genreInfo) => (
+                      <MenuItem key={genreInfo.genre} value={genreInfo.genre}>
+                        <Checkbox
+                          checked={selectedGenres.indexOf(genreInfo.genre) > -1}
+                        />
+                        <ListItemText primary={genreInfo.genre} />
+                      </MenuItem>
+                    ))}
+                  </Select>
                 </FormControl>
-              </CardContent>
-            </Card>
-          </ThemeProvider>
+
+                <FormControl
+                  variant="standard"
+                  sx={{ mt: 3, minWidth: 240, maxWidth: 240 }}
+                >
+                  <InputLabel id="artistsSelect">Artists</InputLabel>
+                  <Select
+                    labelId="artistsSelect"
+                    multiple
+                    renderValue={(selected) => selected.join(", ")}
+                    value={selectedArtists}
+                    onChange={selectedArtistsHandler}
+                  >
+                    {artists.map((artistInfo) => (
+                      <MenuItem
+                        key={artistInfo.first_name.concat(
+                          " ",
+                          artistInfo.last_name
+                        )}
+                        value={artistInfo.first_name.concat(
+                          " ",
+                          artistInfo.last_name
+                        )}
+                      >
+                        <Checkbox
+                          checked={
+                            selectedArtists.indexOf(
+                              artistInfo.first_name.concat(
+                                " ",
+                                artistInfo.last_name
+                              )
+                            ) > -1
+                          }
+                        />
+                        <ListItemText
+                          primary={artistInfo.first_name.concat(
+                            " ",
+                            artistInfo.last_name
+                          )}
+                        />
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <FormControl
+                  variant="standard"
+                  sx={{ mt: 5, minWidth: 240, maxWidth: 240 }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      views={["day", "month", "year"]}
+                      openTo="day"
+                      label="Release Date Start"
+                      value={releaseStartDate}
+                      onChange={(newValue) => {
+                        setReleaseStartDate(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} helperText={null} />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </FormControl>
+                <FormControl
+                  variant="standard"
+                  sx={{ mt: 5, minWidth: 240, maxWidth: 240 }}
+                >
+                  <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <DatePicker
+                      views={["day", "month", "year"]}
+                      openTo="day"
+                      label="Release Date End"
+                      value={releaseEndDate}
+                      onChange={(newValue) => {
+                        setReleaseEndDate(newValue);
+                      }}
+                      renderInput={(params) => (
+                        <TextField {...params} helperText={null} />
+                      )}
+                    />
+                  </LocalizationProvider>
+                </FormControl>
+                <Button
+                  variant="contained"
+                  aria-label="Apply"
+                  color="primary"
+                  size="large"
+                  sx={{ mt: 5 }}
+                  onClick={applySearchHandler}
+                >
+                  APPLY
+                </Button>
+              </FormControl>
+            </CardContent>
+          </Card>
         </Grid>
       </Grid>
     </React.Fragment>
   );
 };
 
-export default Home;
+export default withStyles(styles)(Home);

@@ -25,14 +25,6 @@
   transform: translateZ(0);
 }
 
-.containerReleaseDiv {
-  position: relative;
-  display: flex;
-  margin-right: 16px;
-  margin-top: 10px;
-  justify-content: left;
-}
-
 .cardSearchStyle {
   position: relative;
   width: 24%;
